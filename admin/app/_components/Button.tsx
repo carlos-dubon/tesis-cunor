@@ -1,18 +1,17 @@
 "use client";
 
-import { ReactNode } from "react";
+import { HTMLProps } from "react";
 import { cn } from "../_util/cn";
 
-interface Props {
-  onClick?: () => void;
-  children?: ReactNode;
-  className?: string;
+interface ButtonProps extends HTMLProps<HTMLButtonElement> {
+  isLoading?: boolean;
+  type?: "button" | "submit" | "reset";
 }
 
-export const Button = (props: Props) => {
+export const Button = ({ type = "button", ...props }: ButtonProps) => {
   return (
     <button
-      type="button"
+      type={type}
       className={cn(
         "flex items-center justify-center p-2 rounded bg-blue-500 hover:bg-blue-400 text-white font-medium text-sm transition cursor-pointer",
         props.className

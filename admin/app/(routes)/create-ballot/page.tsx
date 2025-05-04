@@ -1,4 +1,5 @@
 "use client";
+import { compiledContract } from "@/app/_compiled-contract/compiledContract";
 import { Button } from "@/app/_components/Button";
 import { Input } from "@/app/_components/Input";
 import { FormError } from "@/app/_util/form-error";
@@ -23,6 +24,7 @@ export default function CreateBallotPage() {
 
   const onSubmit = (form: z.infer<typeof FormSchema>) => {
     console.log(form);
+    deploy();
   };
 
   const deploy = async () => {
@@ -34,7 +36,11 @@ export default function CreateBallotPage() {
     const provider = new ethers.BrowserProvider(window.ethereum);
     const signer = await provider.getSigner();
 
-    const factory = new ethers.ContractFactory(contractABI, bytecode, signer);
+    const factory = new ethers.ContractFactory(
+      compiledContract.abi,
+      compiledContract.bytecode,
+      signer
+    );
 
     try {
       const contract = await factory.deploy("Hello from Next.js!");
@@ -52,7 +58,7 @@ export default function CreateBallotPage() {
 
       <form
         className="flex flex-col gap-4 mt-4"
-        onSubmit={handleSubmit((d) => console.log(d))}
+        onSubmit={handleSubmit(onSubmit)}
       >
         <Input
           {...register("name")}
@@ -66,7 +72,7 @@ export default function CreateBallotPage() {
           label="Descripción"
           error={errors.description?.message}
         />
-        <Button onClick={handleSubmit(onSubmit)}>Crear boleta</Button>
+        <Button type="submit">Crear boleta</Button>
       </form>
     </div>
   );
