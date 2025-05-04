@@ -3,6 +3,7 @@ import { Button } from "@/app/_components/Button";
 import { Input } from "@/app/_components/Input";
 import { FormError } from "@/app/_util/form-error";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { ethers } from "ethers";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
@@ -22,6 +23,27 @@ export default function CreateBallotPage() {
 
   const onSubmit = (form: z.infer<typeof FormSchema>) => {
     console.log(form);
+  };
+
+  const deploy = async () => {
+    if (!window.ethereum) {
+      alert("MetaMask not detected");
+      return;
+    }
+
+    const provider = new ethers.BrowserProvider(window.ethereum);
+    const signer = await provider.getSigner();
+
+    const factory = new ethers.ContractFactory(contractABI, bytecode, signer);
+
+    try {
+      const contract = await factory.deploy("Hello from Next.js!");
+      await contract.waitForDeployment(); // equivalent to tx.wait()
+
+      alert(`Contract deployed at: ${await contract.getAddress()}`);
+    } catch (error) {
+      console.error("Deployment failed", error);
+    }
   };
 
   return (
