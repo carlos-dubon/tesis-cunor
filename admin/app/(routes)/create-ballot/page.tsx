@@ -1,6 +1,7 @@
 "use client";
 import { compiledContract } from "@/app/_compiled-contract/compiledContract";
 import { Button } from "@/app/_components/Button";
+import { Heading } from "@/app/_components/Heading";
 import { Input } from "@/app/_components/Input";
 import { FormError } from "@/app/_util/form-error";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -54,7 +55,7 @@ export default function CreateBallotPage() {
 
   return (
     <div>
-      <div className="font-bold text-2xl">Crear boleta</div>
+      <Heading title="Crear boleta" />
 
       <form
         className="flex flex-col gap-4 mt-4"
