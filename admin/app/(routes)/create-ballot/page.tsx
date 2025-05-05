@@ -10,7 +10,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 
 const FormSchema = z.object({
-  name: z.string().min(1, FormError.required),
+  title: z.string().min(1, FormError.required),
   description: z.string().min(1, FormError.required),
 });
 
@@ -25,10 +25,10 @@ export default function CreateBallotPage() {
 
   const onSubmit = (form: z.infer<typeof FormSchema>) => {
     console.log(form);
-    deploy();
+    deploy(form.title, form.description);
   };
 
-  const deploy = async () => {
+  const deploy = async (title: string, description: string) => {
     if (!window.ethereum) {
       alert("MetaMask not detected");
       return;
@@ -44,7 +44,7 @@ export default function CreateBallotPage() {
     );
 
     try {
-      const contract = await factory.deploy("Hello from Next.js!");
+      const contract = await factory.deploy(title, description);
       await contract.waitForDeployment(); // equivalent to tx.wait()
 
       alert(`Contract deployed at: ${await contract.getAddress()}`);
@@ -62,10 +62,10 @@ export default function CreateBallotPage() {
         onSubmit={handleSubmit(onSubmit)}
       >
         <Input
-          {...register("name")}
+          {...register("title")}
           required
-          label="Nombre"
-          error={errors.name?.message}
+          label="Titulo"
+          error={errors.title?.message}
         />
         <Input
           {...register("description")}
