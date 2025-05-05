@@ -17,7 +17,7 @@ export default function CreateBallotPage() {
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isValid },
   } = useForm({
     resolver: zodResolver(FormSchema),
   });
