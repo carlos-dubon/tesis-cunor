@@ -5,16 +5,24 @@ import { cn } from "../_util/cn";
 
 interface ButtonProps extends HTMLProps<HTMLButtonElement> {
   isLoading?: boolean;
+  variant?: "primary" | "secondary";
   type?: "button" | "submit" | "reset";
 }
 
-export const Button = ({ type = "button", ...props }: ButtonProps) => {
+export const Button = ({
+  variant = "primary",
+  type = "button",
+  ...props
+}: ButtonProps) => {
   return (
     <button
       type={type}
       className={cn(
-        "flex items-center justify-center p-2 rounded bg-blue-500 hover:bg-blue-400 text-white font-medium text-sm transition cursor-pointer shadow",
+        "flex items-center justify-center p-2 rounded font-medium text-sm transition cursor-pointer shadow",
         props.isLoading && "hover:bg-blue-500 cursor-not-allowed",
+        variant === "primary" && "bg-blue-500 hover:bg-blue-400 text-white",
+        variant === "secondary" &&
+          "bg-white hover:bg-gray-100 ring ring-gray-300",
         props.className
       )}
       onClick={props.onClick}
