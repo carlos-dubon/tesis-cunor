@@ -24,6 +24,8 @@ contract Ballot {
     mapping(string => Voter) private voters; // DPI -> Voter
     mapping(string => Candidate) private candidates; // DPI -> Candidate
 
+    string[] private candidateDpis;
+
     // Events
     event VoterRegistered(string dpi);
     event CandidateRegistered(string dpi, string name);
@@ -49,10 +51,10 @@ contract Ballot {
         emit VoterRegistered(_dpi);
     }
 
-    function addCandidate(string memory _name, string memory _dpi)
-        public
-        onlyOwner
-    {
+    function addCandidate(
+        string memory _name,
+        string memory _dpi
+    ) public onlyOwner {
         require(!hasStarted, "Ballot already started.");
         require(!candidates[_dpi].isRegistered, "Candidate already exists.");
         candidates[_dpi] = Candidate({
@@ -60,6 +62,7 @@ contract Ballot {
             voteCount: 0,
             isRegistered: true
         });
+        candidateDpis.push(_dpi);
         emit CandidateRegistered(_dpi, _name);
     }
 
@@ -76,9 +79,10 @@ contract Ballot {
         emit BallotEnded();
     }
 
-    function castVote(string memory _candidateDpi, string memory _voterDpi)
-        public
-    {
+    function castVote(
+        string memory _candidateDpi,
+        string memory _voterDpi
+    ) public {
         require(hasStarted, "Ballot not started.");
         require(!hasEnded, "Ballot ended.");
         require(voters[_voterDpi].isRegistered, "Voter not registered.");
@@ -91,11 +95,9 @@ contract Ballot {
         emit VoteCast(_candidateDpi);
     }
 
-    function getCandidateVoteCount(string memory _dpi)
-        public
-        view
-        returns (uint256)
-    {
+    function getCandidateVoteCount(
+        string memory _dpi
+    ) public view returns (uint256) {
         require(candidates[_dpi].isRegistered, "Candidate not found.");
         return candidates[_dpi].voteCount;
     }
@@ -103,5 +105,13 @@ contract Ballot {
     function hasVoterVoted(string memory _dpi) public view returns (bool) {
         require(voters[_dpi].isRegistered, "Voter not registered.");
         return voters[_dpi].hasVoted;
+    }
+
+    function getCandidates() public view returns (Candidate[] memory) {
+        Candidate[] memory result = new Candidate[](candidateDpis.length);
+        for (uint256 i = 0; i < candidateDpis.length; i++) {
+            result[i] = candidates[candidateDpis[i]];
+        }
+        return result;
     }
 }
