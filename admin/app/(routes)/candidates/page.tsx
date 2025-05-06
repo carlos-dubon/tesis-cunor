@@ -24,6 +24,7 @@ export default function CandidatesPage() {
   });
 
   const [isLoading, setIsLoading] = useState(false);
+  const [candidates, setCandidates] = useState([]);
 
   const onSubmit = async (form: z.infer<typeof CandidatesFormSchema>) => {
     setIsLoading(true);
@@ -43,7 +44,16 @@ export default function CandidatesPage() {
 
     const candidates = await contract.getCandidates();
 
-    console.log(candidates);
+    const result = candidates.map(
+      ({ name, voteCount, isRegistered }: never) => ({
+        name,
+        voteCount: Number(voteCount),
+        isRegistered,
+      })
+    );
+
+    console.log(result);
+    setCandidates(result);
 
     setIsLoading(false);
   };
@@ -66,6 +76,12 @@ export default function CandidatesPage() {
           Ver lista de candidatos
         </Button>
       </form>
+
+      <div className="mt-8 flex flex-col gap-2">
+        {candidates.map((c, index) => {
+          return <div key={index}>{JSON.stringify(c)}</div>;
+        })}
+      </div>
     </div>
   );
 }
