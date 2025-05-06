@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { Sidebar } from "./_components/Sidebar";
+import { Toaster } from "react-hot-toast";
 
 const font = Inter({
   display: "swap",
@@ -26,6 +27,7 @@ export default function RootLayout({
             {children}
           </div>
         </div>
+        <Toaster />
       </body>
     </html>
   );
