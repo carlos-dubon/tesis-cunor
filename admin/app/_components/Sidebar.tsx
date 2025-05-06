@@ -11,6 +11,9 @@ export const Sidebar = () => {
       <Link href="/add-candidate">
         <Button className="w-full">Agregar candidato</Button>
       </Link>
+      <Link href="/candidates">
+        <Button className="w-full">Lista de candidatos</Button>
+      </Link>
       <Link href="/add-voter">
         <Button className="w-full">Agregar votante</Button>
       </Link>

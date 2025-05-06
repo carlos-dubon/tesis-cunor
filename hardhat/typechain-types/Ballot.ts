@@ -3,6 +3,7 @@
 /* eslint-disable */
 import type {
   BaseContract,
+  BigNumberish,
   BytesLike,
   FunctionFragment,
   Result,
@@ -21,6 +22,20 @@ import type {
   TypedContractMethod,
 } from "./common";
 
+export declare namespace Ballot {
+  export type CandidateStruct = {
+    name: string;
+    voteCount: BigNumberish;
+    isRegistered: boolean;
+  };
+
+  export type CandidateStructOutput = [
+    name: string,
+    voteCount: bigint,
+    isRegistered: boolean
+  ] & { name: string; voteCount: bigint; isRegistered: boolean };
+}
+
 export interface BallotInterface extends Interface {
   getFunction(
     nameOrSignature:
@@ -30,6 +45,7 @@ export interface BallotInterface extends Interface {
       | "description"
       | "endBallot"
       | "getCandidateVoteCount"
+      | "getCandidates"
       | "hasEnded"
       | "hasStarted"
       | "hasVoterVoted"
@@ -65,6 +81,10 @@ export interface BallotInterface extends Interface {
     functionFragment: "getCandidateVoteCount",
     values: [string]
   ): string;
+  encodeFunctionData(
+    functionFragment: "getCandidates",
+    values?: undefined
+  ): string;
   encodeFunctionData(functionFragment: "hasEnded", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "hasStarted",
@@ -94,6 +114,10 @@ export interface BallotInterface extends Interface {
   decodeFunctionResult(functionFragment: "endBallot", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "getCandidateVoteCount",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "getCandidates",
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "hasEnded", data: BytesLike): Result;
@@ -230,6 +254,12 @@ export interface Ballot extends BaseContract {
 
   getCandidateVoteCount: TypedContractMethod<[_dpi: string], [bigint], "view">;
 
+  getCandidates: TypedContractMethod<
+    [],
+    [Ballot.CandidateStructOutput[]],
+    "view"
+  >;
+
   hasEnded: TypedContractMethod<[], [boolean], "view">;
 
   hasStarted: TypedContractMethod<[], [boolean], "view">;
@@ -268,6 +298,9 @@ export interface Ballot extends BaseContract {
   getFunction(
     nameOrSignature: "getCandidateVoteCount"
   ): TypedContractMethod<[_dpi: string], [bigint], "view">;
+  getFunction(
+    nameOrSignature: "getCandidates"
+  ): TypedContractMethod<[], [Ballot.CandidateStructOutput[]], "view">;
   getFunction(
     nameOrSignature: "hasEnded"
   ): TypedContractMethod<[], [boolean], "view">;
