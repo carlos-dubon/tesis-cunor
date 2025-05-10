@@ -9,6 +9,8 @@ import {
 import { BrowserProvider, Contract, JsonRpcSigner } from "ethers";
 import { compiledContract } from "../../compiledContact/compiledContact";
 
+const contractAddress = "0x8604415a6Bd5b609218d5C5B014c1E3d7dAD86Dd";
+
 export function Home() {
   const { walletProvider } = useAppKitProvider();
   const { isConnected, address } = useAppKitAccount();
@@ -20,27 +22,31 @@ export function Home() {
       return;
     }
 
+    setIsLoading(true);
+
     try {
-      setIsLoading(true);
-      const ethersProvider = new BrowserProvider(walletProvider);
-      const signer = new JsonRpcSigner(ethersProvider, address);
+      console.log("walletProvider:", walletProvider);
+
+      const provider = new BrowserProvider(walletProvider);
+
+      const signer = new JsonRpcSigner(provider, address);
 
       const contract = new Contract(
-        "0xe78412B4c576aaCE0AdD8B4e3a5E28Cc4525cA92",
+        contractAddress,
         compiledContract.abi,
         signer
       );
 
-      const candidateDpi = "123456789";
-      const voterDpi = "987654321";
+      const candidateDpi = "1"; // Replace with actual candidate DPI
+      const voterDpi = "123"; // Replace with actual voter DPI (from user input or context)
 
       const tx = await contract.castVote(candidateDpi, voterDpi);
-      await tx.wait();
+      await tx.wait(); // Wait for the transaction to be mined
 
-      Alert.alert("Success", "Vote has been cast!");
-    } catch (err) {
-      console.error(err);
-      Alert.alert("Error", "Failed to cast vote");
+      Alert.alert("Voto enviado exitosamente");
+    } catch (e) {
+      console.error(e);
+      Alert.alert("Error al enviar el voto");
     } finally {
       setIsLoading(false);
     }

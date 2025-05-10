@@ -16,7 +16,7 @@ Run `npx hardhat compile` in the `hardhat` folder.
 
 Goto `artifacts/contracts` and copy the contents of `ABI` and `bytecode` into the `_compiled-contract/compiledContract` folder.
 
-latest deployed sepolia testnet address: 0xe78412B4c576aaCE0AdD8B4e3a5E28Cc4525cA92
+latest deployed sepolia testnet address: 0x8604415a6Bd5b609218d5C5B014c1E3d7dAD86Dd
 
 metamask passcode: album unique peace praise face decline fence sell blur region sentence good
 Carlitos1999
