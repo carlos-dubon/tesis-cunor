@@ -4,7 +4,7 @@ import { Button, Text } from "@react-navigation/elements";
 import {
   useAppKitProvider,
   useAppKitAccount,
-  ConnectButton,
+  AppKitButton,
 } from "@reown/appkit-ethers-react-native";
 import { BrowserProvider, Contract, JsonRpcSigner } from "ethers";
 import { compiledContract } from "../../compiledContact/compiledContact";
@@ -48,10 +48,10 @@ export function Home() {
 
   return (
     <View style={styles.container}>
+      <AppKitButton />
       <Button onPress={handleVote} disabled={isLoading}>
-        {isLoading ? "Casting vote..." : "Cast Vote"}
+        {isLoading ? "Enviando voto" : "Enviar voto"}
       </Button>
-      <ConnectButton label="Conectar wallet" loadingLabel="Cargando..." />
     </View>
   );
 }

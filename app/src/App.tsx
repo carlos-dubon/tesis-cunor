@@ -1,9 +1,9 @@
+import "@walletconnect/react-native-compat";
 import { Assets as NavigationAssets } from "@react-navigation/elements";
 import { Asset } from "expo-asset";
 import * as SplashScreen from "expo-splash-screen";
 import * as React from "react";
 import { Navigation } from "./navigation";
-import "@walletconnect/react-native-compat";
 
 import {
   createAppKit,
@@ -49,7 +49,7 @@ const sepolia = {
   name: "Sepolia",
   currency: "ETH",
   explorerUrl: "https://sepolia.etherscan.io",
-  rpcUrl: "https://rpc.sepolia.org", // You can also use Alchemy/Infura URLs here
+  rpcUrl: "https://sepolia.infura.io/v3/8d3a87cbe9c6401d9910d220b909877c",
 };
 
 const chains = [mainnet, sepolia];
