@@ -44,7 +44,15 @@ const mainnet = {
   rpcUrl: "https://cloudflare-eth.com",
 };
 
-const chains = [mainnet];
+const sepolia = {
+  chainId: 11155111,
+  name: "Sepolia",
+  currency: "ETH",
+  explorerUrl: "https://sepolia.etherscan.io",
+  rpcUrl: "https://rpc.sepolia.org", // You can also use Alchemy/Infura URLs here
+};
+
+const chains = [mainnet, sepolia];
 
 // 4. Create modal
 createAppKit({
