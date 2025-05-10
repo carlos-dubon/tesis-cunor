@@ -46,21 +46,24 @@ export const Sidebar = () => {
   const pathname = usePathname();
 
   return (
-    <div className="flex flex-col gap-4 p-4">
+    <div className="flex flex-col gap-4 p-4 bg-gray-50">
       <div className="flex items-center gap-2">
-        <MdHowToVote size={32} />
-        <div className="text-lg font-bold">Admin</div>
+        <MdHowToVote size={48} className="text-green-400" />
+        <div>
+          <div className="text-lg font-bold">Vota Seguro</div>
+          <div className="text-sm text-gray-500">Admin</div>
+        </div>
       </div>
       {menuItems.map((i) => (
         <Link href={i.href} key={i.href}>
           <Button
             variant={pathname === i.href ? "primary" : "secondary"}
-            className="w-full"
+            className="flex justify-start gap-2 w-full"
           >
-            <div className="flex items-center gap-2 w-full">
-              <div className="w-[205px] text-left">{i.label}</div>
+            <div>
               <i.icon size={20} />
             </div>
+            <div>{i.label}</div>
           </Button>
         </Link>
       ))}

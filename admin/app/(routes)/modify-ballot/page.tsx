@@ -7,9 +7,10 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { ethers } from "ethers";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { compiledContract } from "@/app/_compiled-contract/compiledContract";
+import { useBallot } from "@/app/_context/BallotContext";
 
 const ModifyBallotSchema = z.object({
   address: z.string().min(1, FormError.required),
@@ -20,6 +21,7 @@ export default function ModifyBallotPage() {
     register,
     handleSubmit,
     formState: { errors },
+    setValue,
   } = useForm({
     resolver: zodResolver(ModifyBallotSchema),
   });
@@ -114,6 +116,12 @@ export default function ModifyBallotPage() {
       setIsLoadingEnd(false);
     }
   };
+
+  const { ballotAddress } = useBallot();
+
+  useEffect(() => {
+    if (ballotAddress) setValue("address", ballotAddress);
+  }, [ballotAddress]);
 
   return (
     <div>

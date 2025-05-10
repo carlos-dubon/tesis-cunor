@@ -47,7 +47,9 @@ export const Button = ({
           </svg>
         </div>
       )}
-      <div className={cn(props.isLoading && "opacity-0")}>{props.children}</div>
+      <div className={cn(props.isLoading ? "opacity-0" : "", props.className)}>
+        {props.children}
+      </div>
     </button>
   );
 };

@@ -3,10 +3,11 @@ import { compiledContract } from "@/app/_compiled-contract/compiledContract";
 import { Button } from "@/app/_components/Button";
 import { Heading } from "@/app/_components/Heading";
 import { Input } from "@/app/_components/Input";
+import { useBallot } from "@/app/_context/BallotContext";
 import { FormError } from "@/app/_util/form-error";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ethers } from "ethers";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
@@ -19,6 +20,7 @@ export default function CandidatesPage() {
     register,
     handleSubmit,
     formState: { errors },
+    setValue,
   } = useForm({
     resolver: zodResolver(CandidatesFormSchema),
   });
@@ -57,6 +59,12 @@ export default function CandidatesPage() {
 
     setIsLoading(false);
   };
+
+  const { ballotAddress } = useBallot();
+
+  useEffect(() => {
+    if (ballotAddress) setValue("address", ballotAddress);
+  }, [ballotAddress]);
 
   return (
     <div>

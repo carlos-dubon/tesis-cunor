@@ -5,11 +5,12 @@ import { Button } from "@/app/_components/Button";
 import { FormError } from "@/app/_util/form-error";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ethers } from "ethers";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import toast from "react-hot-toast";
 import { compiledContract } from "@/app/_compiled-contract/compiledContract";
+import { useBallot } from "@/app/_context/BallotContext";
 
 const AddVoterSchema = z.object({
   address: z.string().min(1, FormError.required),
@@ -22,6 +23,7 @@ export default function AddVoterPage() {
     handleSubmit,
     reset,
     formState: { errors },
+    setValue,
   } = useForm({
     resolver: zodResolver(AddVoterSchema),
   });
@@ -51,6 +53,7 @@ export default function AddVoterPage() {
 
       toast.success("Votante agregado exitosamente.");
       reset();
+      if (ballotAddress) setValue("address", ballotAddress);
     } catch (error) {
       console.error("Error al agregar votante:", error);
       toast.error("No se pudo agregar el votante.");
@@ -58,6 +61,12 @@ export default function AddVoterPage() {
       setIsLoading(false);
     }
   };
+
+  const { ballotAddress } = useBallot();
+
+  useEffect(() => {
+    if (ballotAddress) setValue("address", ballotAddress);
+  }, [ballotAddress]);
 
   return (
     <div>

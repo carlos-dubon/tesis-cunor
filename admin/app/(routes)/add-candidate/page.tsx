@@ -3,10 +3,11 @@ import { compiledContract } from "@/app/_compiled-contract/compiledContract";
 import { Button } from "@/app/_components/Button";
 import { Heading } from "@/app/_components/Heading";
 import { Input } from "@/app/_components/Input";
+import { useBallot } from "@/app/_context/BallotContext";
 import { FormError } from "@/app/_util/form-error";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ethers } from "ethers";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { z } from "zod";
@@ -23,6 +24,7 @@ export default function AddCandidate() {
     handleSubmit,
     reset,
     formState: { errors },
+    setValue,
   } = useForm({
     resolver: zodResolver(CandidateFormSchema),
   });
@@ -52,6 +54,7 @@ export default function AddCandidate() {
 
       toast.success("Candidato agregado exitosamente!");
       reset();
+      if (ballotAddress) setValue("address", ballotAddress);
     } catch (error) {
       console.error("Error al agregar candidato:", error);
       toast.error("Hubo un error al agregar el candidato.");
@@ -59,6 +62,12 @@ export default function AddCandidate() {
       setIsLoading(false);
     }
   };
+
+  const { ballotAddress } = useBallot();
+
+  useEffect(() => {
+    if (ballotAddress) setValue("address", ballotAddress);
+  }, [ballotAddress]);
 
   return (
     <div>

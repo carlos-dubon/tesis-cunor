@@ -11,6 +11,7 @@ import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { z } from "zod";
 import { QRCodeSVG } from "qrcode.react";
+import { useBallot } from "@/app/_context/BallotContext";
 
 const BallotFormSchema = z.object({
   title: z.string().min(1, FormError.required),
@@ -30,6 +31,8 @@ export default function CreateBallotPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [address, setAddress] = useState("");
 
+  const { setBallotAddress } = useBallot();
+
   const onSubmit = async (form: z.infer<typeof BallotFormSchema>) => {
     setIsLoading(true);
 
@@ -48,6 +51,8 @@ export default function CreateBallotPage() {
       signer
     );
 
+    setBallotAddress("");
+
     try {
       const contract = await factory.deploy(form.title, form.description);
       await contract.waitForDeployment(); // equivalent to tx.wait()
@@ -55,6 +60,7 @@ export default function CreateBallotPage() {
       const contractAddress = await contract.getAddress();
 
       setAddress(contractAddress);
+      setBallotAddress(contractAddress);
     } catch (error) {
       toast.error("El deploy fallo (revisar la consola)");
       console.error("Deployment failed", error);
