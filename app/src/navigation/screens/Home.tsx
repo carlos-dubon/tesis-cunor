@@ -1,62 +1,40 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Alert, View, StyleSheet } from "react-native";
 import { Button, Text } from "@react-navigation/elements";
-import {
-  useAppKitProvider,
-  useAppKitAccount,
-  AppKitButton,
-} from "@reown/appkit-ethers-react-native";
-import { BrowserProvider, Contract, JsonRpcSigner } from "ethers";
+import { AppKitButton } from "@reown/appkit-wagmi-react-native";
 import { compiledContract } from "../../compiledContact/compiledContact";
+import { useAccount, useWriteContract } from "wagmi";
 
 const contractAddress = "0x8604415a6Bd5b609218d5C5B014c1E3d7dAD86Dd";
 
 export function Home() {
-  const { walletProvider } = useAppKitProvider();
-  const { isConnected, address } = useAppKitAccount();
-  const [isLoading, setIsLoading] = useState(false);
+  const { isConnected, address, status } = useAccount();
 
-  const handleVote = async () => {
-    if (!isConnected || !walletProvider || !address) {
-      Alert.alert("Wallet not connected");
-      return;
-    }
+  const { data, isPending, isSuccess, isError, writeContract, error } =
+    useWriteContract();
 
-    setIsLoading(true);
-
+  const onPress = async () => {
     try {
-      console.log("walletProvider:", walletProvider);
-
-      const provider = new BrowserProvider(walletProvider);
-
-      const signer = new JsonRpcSigner(provider, address);
-
-      const contract = new Contract(
-        contractAddress,
-        compiledContract.abi,
-        signer
-      );
-
-      const candidateDpi = "1"; // Replace with actual candidate DPI
-      const voterDpi = "123"; // Replace with actual voter DPI (from user input or context)
-
-      const tx = await contract.castVote(candidateDpi, voterDpi);
-      await tx.wait(); // Wait for the transaction to be mined
-
-      Alert.alert("Voto enviado exitosamente");
-    } catch (e) {
-      console.error(e);
-      Alert.alert("Error al enviar el voto");
-    } finally {
-      setIsLoading(false);
+      writeContract({
+        address: contractAddress,
+        abi: compiledContract.abi,
+        functionName: "castVote",
+        args: ["1", "123"],
+      });
+    } catch (error) {
+      console.log(error);
     }
   };
+
+  useEffect(() => {
+    console.log({ data, isPending, isSuccess, isError, error });
+  }, [data, isPending, isSuccess, isError, error]);
 
   return (
     <View style={styles.container}>
       <AppKitButton />
-      <Button onPress={handleVote} disabled={isLoading}>
-        {isLoading ? "Enviando voto" : "Enviar voto"}
+      <Button onPress={() => onPress()} disabled={isPending}>
+        {isPending ? "Enviando voto" : "Enviar voto"}
       </Button>
     </View>
   );
