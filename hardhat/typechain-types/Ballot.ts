@@ -27,13 +27,15 @@ export declare namespace Ballot {
     name: string;
     voteCount: BigNumberish;
     isRegistered: boolean;
+    dpi: string;
   };
 
   export type CandidateStructOutput = [
     name: string,
     voteCount: bigint,
-    isRegistered: boolean
-  ] & { name: string; voteCount: bigint; isRegistered: boolean };
+    isRegistered: boolean,
+    dpi: string
+  ] & { name: string; voteCount: bigint; isRegistered: boolean; dpi: string };
 }
 
 export interface BallotInterface extends Interface {

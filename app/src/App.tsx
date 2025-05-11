@@ -4,7 +4,7 @@ import { Asset } from "expo-asset";
 import * as SplashScreen from "expo-splash-screen";
 import * as React from "react";
 import { Navigation } from "./navigation";
-
+import Toast from "react-native-toast-message";
 Asset.loadAsync([
   ...NavigationAssets,
   require("./assets/newspaper.png"),
@@ -39,7 +39,7 @@ const metadata = {
 
 const chains = [mainnet, sepolia] as const;
 
-const wagmiConfig = defaultWagmiConfig({ chains, projectId, metadata });
+export const wagmiConfig = defaultWagmiConfig({ chains, projectId, metadata });
 
 // 3. Create modal
 createAppKit({
@@ -67,6 +67,7 @@ export function App() {
             }}
           />
           <AppKit />
+          <Toast />
         </QueryClientProvider>
       </WagmiProvider>
     </>

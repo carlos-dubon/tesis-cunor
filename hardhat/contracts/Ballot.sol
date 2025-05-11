@@ -19,6 +19,7 @@ contract Ballot {
         string name;
         uint256 voteCount;
         bool isRegistered;
+        string dpi;
     }
 
     mapping(string => Voter) private voters; // DPI -> Voter
@@ -60,7 +61,8 @@ contract Ballot {
         candidates[_dpi] = Candidate({
             name: _name,
             voteCount: 0,
-            isRegistered: true
+            isRegistered: true,
+            dpi: _dpi
         });
         candidateDpis.push(_dpi);
         emit CandidateRegistered(_dpi, _name);
