@@ -63,6 +63,12 @@ export function Home() {
         functionName: "castVote",
         args: [selectedCandidate, dpi],
       });
+
+      Toast.show({
+        type: "success",
+        text1: "Voto emitido",
+        text2: "Tu voto ha sido registrado correctamente",
+      });
     } catch (error) {
       console.log(error);
       Toast.show({
