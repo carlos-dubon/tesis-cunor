@@ -2,7 +2,11 @@ import React, { useState } from "react";
 import { View, StyleSheet, Text, TouchableOpacity } from "react-native";
 import { AppKitButton } from "@reown/appkit-wagmi-react-native";
 import { compiledContract } from "../../compiledContact/compiledContact";
-import { readContract, writeContract } from "@wagmi/core";
+import {
+  readContract,
+  writeContract,
+  waitForTransactionReceipt,
+} from "@wagmi/core";
 import { useAccount } from "wagmi";
 import { Input } from "../../components/Input";
 import { Button } from "../../components/Button";
@@ -57,18 +61,24 @@ export function Home() {
   const castVote = async () => {
     setIsSendingVote(true);
     try {
-      const result = await writeContract(wagmiConfig, {
+      const hash = await writeContract(wagmiConfig, {
         address: contractAddress as `0x${string}`,
         abi: compiledContract.abi,
         functionName: "castVote",
         args: [selectedCandidate, dpi],
       });
 
-      Toast.show({
-        type: "success",
-        text1: "Voto emitido",
-        text2: "Tu voto ha sido registrado correctamente",
-      });
+      const receipt = await waitForTransactionReceipt(wagmiConfig, { hash });
+
+      if (receipt.status === "success") {
+        Toast.show({
+          type: "success",
+          text1: "Voto emitido",
+          text2: "Tu voto ha sido registrado correctamente",
+        });
+      } else {
+        throw new Error("Transaction failed");
+      }
     } catch (error) {
       console.log(error);
       Toast.show({
